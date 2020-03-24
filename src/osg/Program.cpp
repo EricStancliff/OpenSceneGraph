@@ -718,10 +718,11 @@ void Program::PerContextProgram::linkProgram(osg::State& state)
 
     if (!_loadedBinary)
     {
-        const GLsizei shaderMaxCount = 20;
+        const GLsizei shaderMaxCount = _program->getNumShaders();
         GLsizei shadersCount = 0;
-        GLuint shaderObjectHandle[shaderMaxCount];
-        _extensions->glGetAttachedShaders(_glProgramHandle, shaderMaxCount, &shadersCount, shaderObjectHandle);
+        std::vector<GLuint> shaderObjectHandle;
+        shaderObjectHandle.resize(shaderMaxCount);
+        _extensions->glGetAttachedShaders(_glProgramHandle, shaderMaxCount, &shadersCount, shaderObjectHandle.data());
 
         typedef std::map<GLuint, int> ShaderSet;
         ShaderSet shadersRequired;
